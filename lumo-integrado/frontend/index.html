@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumo — Produtividade Tranquila</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#192853;--navy-dark:#0E1D47;
+  --yellow:#FFE14E;--yellow-soft:#FFFBE8;--yellow-hover:#FFD700;
+  --bg-main:#EFF8FF;--bg-card:#ffffff;--bg-surface:#F4F7FC;
+  --text-primary:#192853;--text-secondary:#5A6A8A;--text-muted:#9aaac4;
+  --border:#E2EBF5;--border-soft:#EEF3FA;
+  --tag-work-bg:#FFF8E1;--tag-work-txt:#9E7B00;
+  --tag-study-bg:#E8F4FD;--tag-study-txt:#1565A0;
+  --tag-personal-bg:#F0FBF0;--tag-personal-txt:#2E7D32;
+  --tag-design-bg:#FCF0FF;--tag-design-txt:#7B1FA2;
+  --col0:#FFB347;--col1:#74C0FC;--col2:#A78BFA;--col3:#6EE7B7;
+  --sidebar-w:252px;
+  --shadow-card:0 2px 16px rgba(25,40,83,0.06);
+  --shadow-hover:0 8px 32px rgba(25,40,83,0.12);
+  --ease:cubic-bezier(0.4,0,0.2,1);
+  --tr:all 0.22s var(--ease);
+}
+body.dark{
+  --bg-main:#0D1529;--bg-card:#152038;--bg-surface:#0f1a30;
+  --text-primary:#E8EFFC;--text-secondary:#7A96C0;--text-muted:#3d5478;
+  --border:#1c2e4a;--border-soft:#172540;
+  --tag-work-bg:#2A2200;--tag-work-txt:#FFD740;
+  --tag-study-bg:#071a30;--tag-study-txt:#64B5F6;
+  --tag-personal-bg:#071f0a;--tag-personal-txt:#81C784;
+  --tag-design-bg:#190928;--tag-design-txt:#CE93D8;
+  --shadow-card:0 2px 20px rgba(0,0,0,0.35);
+  --shadow-hover:0 8px 36px rgba(0,0,0,0.5);
+}
+body{font-family:'Manrope',sans-serif;background:var(--bg-main);color:var(--text-primary);min-height:100vh;transition:background .3s,color .3s}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* LOGIN */
+#login-screen{display:flex;min-height:100vh}
+.login-left{flex:1;background:linear-gradient(145deg,#0A1628 0%,#0E1D47 55%,#162f6e 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px;position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;top:-120px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,225,78,.07) 0%,transparent 65%);pointer-events:none}
+.login-brand-big{text-align:center;margin-bottom:40px;z-index:1;position:relative}
+.login-brand-big h1{font-family:'Playfair Display',serif;font-size:54px;font-weight:400;color:#fff;letter-spacing:-1px;line-height:1}
+.login-brand-big p{font-family:'Cormorant Garamond',serif;font-size:20px;color:rgba(255,255,255,.45);margin-top:8px;font-style:italic}
+.login-tagline{font-family:'Cormorant Garamond',serif;font-size:26px;color:rgba(255,255,255,.75);text-align:center;max-width:340px;line-height:1.55;z-index:1;position:relative;margin-bottom:44px;font-style:italic}
+.login-mockup{z-index:1;position:relative;width:100%;max-width:400px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:22px;backdrop-filter:blur(12px)}
+.mockup-header{display:flex;gap:7px;margin-bottom:14px}
+.mockup-dot{width:8px;height:8px;border-radius:50%}
+.mockup-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.mockup-col{background:rgba(255,255,255,.04);border-radius:10px;padding:9px}
+.mockup-col-h{font-size:9px;color:rgba(255,255,255,.35);margin-bottom:7px;font-weight:700;letter-spacing:.8px}
+.mockup-card{background:rgba(255,255,255,.07);border-radius:7px;padding:7px;margin-bottom:5px}
+.mockup-card-title{font-size:8.5px;color:rgba(255,255,255,.65);margin-bottom:4px}
+.mockup-tag{display:inline-block;background:rgba(255,225,78,.18);color:rgba(255,225,78,.8);font-size:7.5px;padding:1px 6px;border-radius:4px;font-weight:600}
+.login-right{flex:0 0 460px;display:flex;align-items:center;justify-content:center;padding:60px 44px;background:var(--bg-card)}
+.login-form-wrap{width:100%;max-width:340px}
+.login-form-wrap h2{font-family:'Playfair Display',serif;font-size:30px;font-weight:400;color:var(--text-primary);margin-bottom:6px}
+.login-form-wrap .subtitle{color:var(--text-secondary);font-size:13.5px;margin-bottom:32px;line-height:1.5}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.form-group input{width:100%;height:44px;border:1.5px solid var(--border);border-radius:12px;padding:0 16px;font-family:'Manrope',sans-serif;font-size:14px;color:var(--text-primary);background:var(--bg-surface);outline:none;transition:var(--tr)}
+.form-group input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,225,78,.14)}
+.login-error{color:#DC2626;font-size:13px;margin-bottom:12px;padding:10px 14px;background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;display:none}
+.btn-primary{width:100%;height:46px;background:var(--yellow);border:none;border-radius:12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:var(--navy);cursor:pointer;transition:var(--tr);margin-top:4px}
+.btn-primary:hover{background:var(--yellow-hover);box-shadow:0 4px 22px rgba(255,225,78,.4);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.auth-tab{height:40px;border:1.5px solid var(--border);background:var(--bg-surface);border-radius:12px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:var(--text-secondary);cursor:pointer;transition:var(--tr)}
+.auth-tab.active{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+.auth-panel.hidden{display:none}
+.auth-note{margin-top:14px;text-align:center;font-size:12px;color:var(--text-muted);line-height:1.6}
+.auth-note strong{color:var(--text-primary)}
+
+/* LAYOUT */
+#dashboard{display:none;min-height:100vh}
+.app-layout{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);height:100vh;background:linear-gradient(180deg,#0A1628 0%,#0E1D47 60%,#192853 100%);display:flex;flex-direction:column;flex-shrink:0;position:relative;overflow:hidden}
+.sidebar::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 15%,rgba(255,225,78,.05) 0%,transparent 55%);pointer-events:none}
+.sidebar-logo{padding:28px 22px 20px;display:flex;align-items:center;gap:11px;position:relative;z-index:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;color:#fff;letter-spacing:-.4px}
+.sidebar-nav{flex:1;padding:6px 14px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;position:relative;z-index:1}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:12px;cursor:pointer;transition:var(--tr);color:rgba(255,255,255,.45);font-size:13.5px;font-weight:500;position:relative;border:1px solid transparent}
+.nav-item:hover{color:rgba(255,255,255,.82);background:rgba(255,255,255,.055)}
+.nav-item.active{background:linear-gradient(135deg,rgba(255,225,78,.18) 0%,rgba(255,225,78,.08) 100%);color:#FFE14E;font-weight:600;border-color:rgba(255,225,78,.2)}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--yellow);border-radius:0 3px 3px 0}
+.nav-item svg{width:17px;height:17px;stroke:currentColor;flex-shrink:0;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.nav-item.active svg{opacity:1}
+.nav-label{flex:1}
+.nav-badge{background:rgba(255,225,78,.15);color:rgba(255,225,78,.9);font-size:10.5px;padding:2px 7px;border-radius:99px;font-weight:700;border:1px solid rgba(255,225,78,.2)}
+.sidebar-divider{height:1px;background:rgba(255,255,255,.06);margin:8px 14px}
+.sidebar-footer{padding:14px;position:relative;z-index:1}
+.dark-toggle{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:11px;cursor:pointer;transition:var(--tr);margin-bottom:10px}
+.dark-toggle:hover{background:rgba(255,255,255,.05)}
+.dark-toggle span{font-size:12.5px;color:rgba(255,255,255,.45);flex:1}
+.toggle-track{width:36px;height:20px;background:rgba(255,255,255,.1);border-radius:10px;position:relative;transition:var(--tr);flex-shrink:0}
+.toggle-track.on{background:var(--yellow)}
+.toggle-thumb{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:var(--tr)}
+.toggle-track.on .toggle-thumb{left:19px;background:var(--navy)}
+.user-card{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--yellow) 0%,#FFB300 100%);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--navy);flex-shrink:0}
+.user-name{font-size:12.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-email{font-size:10.5px;color:rgba(255,255,255,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* MAIN */
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-surface)}
+.top-bar{display:flex;align-items:center;padding:22px 30px 0;gap:14px;flex-shrink:0}
+.top-bar-left{flex:1}
+.page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:500;color:var(--text-primary);line-height:1.1}
+.page-subtitle{font-size:12.5px;color:var(--text-muted);margin-top:3px}
+.top-bar-right{display:flex;align-items:center;gap:9px}
+.search-box{display:flex;align-items:center;gap:7px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:12px;padding:0 13px;height:38px;min-width:210px;box-shadow:var(--shadow-card);transition:var(--tr)}
+.search-box:focus-within{border-color:rgba(255,225,78,.6);box-shadow:0 0 0 3px rgba(255,225,78,.1)}
+.search-box svg{width:14px;height:14px;stroke:var(--text-muted);fill:none;flex-shrink:0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.search-box input{border:none;background:transparent;font-family:'Manrope',sans-serif;font-size:13px;color:var(--text-primary);outline:none;width:100%}
+.search-box input::placeholder{color:var(--text-muted)}
+.btn-new-task{height:38px;padding:0 16px;background:var(--yellow);border:none;border-radius:11px;font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;color:var(--navy);cursor:pointer;display:flex;align-items:center;gap:6px;transition:var(--tr);box-shadow:0 2px 14px rgba(255,225,78,.28);white-space:nowrap}
+.btn-new-task:hover{background:var(--yellow-hover);transform:translateY(-1px)}
+
+/* FILTER */
+.filter-bar{display:flex;align-items:center;gap:6px;padding:12px 30px 0;flex-shrink:0;flex-wrap:wrap}
+.filter-label{font-size:11.5px;color:var(--text-muted);font-weight:600;white-space:nowrap;margin-right:2px}
+.filter-chip{height:28px;padding:0 12px;border-radius:99px;border:1.5px solid var(--border);background:var(--bg-card);font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:5px}
+.filter-chip:hover{border-color:var(--text-muted);color:var(--text-primary)}
+.filter-chip.active{background:var(--yellow);border-color:var(--yellow);color:var(--navy);font-weight:700}
+.chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* KANBAN */
+.kanban-area{flex:1;padding:14px 30px;overflow-x:auto;overflow-y:hidden;display:flex;flex-direction:column}
+.kanban-board{display:grid;grid-template-columns:repeat(4,minmax(255px,1fr));gap:14px;height:100%;min-height:0}
+.kanban-col{background:var(--bg-card);border-radius:20px;border:1.5px solid var(--border);display:flex;flex-direction:column;box-shadow:var(--shadow-card);overflow:hidden;min-height:0;transition:border-color .2s}
+.kanban-col.drag-over{border-color:var(--yellow);background:var(--yellow-soft)}
+.col-header{padding:15px 15px 11px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.col-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.col-name{font-size:13.5px;font-weight:700;color:var(--text-primary);flex:1}
+.col-count{background:var(--bg-surface);border:1px solid var(--border);color:var(--text-secondary);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px}
+.col-progress{padding:0 15px 11px;flex-shrink:0}
+.progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .5s var(--ease)}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:5px;font-weight:500}
+.col-body{flex:1;overflow-y:auto;padding:0 11px;display:flex;flex-direction:column;gap:8px;padding-bottom:8px}
+.col-add{margin:3px 11px 11px;display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:11px;border:1.5px dashed var(--border);cursor:pointer;color:var(--text-muted);font-size:12.5px;transition:var(--tr);flex-shrink:0}
+.col-add:hover{border-color:rgba(255,225,78,.6);color:var(--text-primary);background:var(--yellow-soft)}
+.col-add svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* CARDS */
+.task-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:14px;padding:13px;cursor:grab;transition:border-color .2s,box-shadow .2s,transform .2s,opacity .15s;position:relative;animation:fadeUp .25s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.task-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px);border-color:rgba(255,225,78,.4)}
+.task-card.dragging{opacity:.3;transform:scale(.97);cursor:grabbing}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.card-title{font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.4;flex:1}
+.card-check{width:19px;height:19px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center}
+.card-check:hover{border-color:var(--yellow)}
+.card-check.done{background:#6EE7B7;border-color:#6EE7B7}
+.card-check.done::after{content:'';display:block;width:9px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px}
+.tag.work{background:var(--tag-work-bg);color:var(--tag-work-txt)}
+.tag.study{background:var(--tag-study-bg);color:var(--tag-study-txt)}
+.tag.personal{background:var(--tag-personal-bg);color:var(--tag-personal-txt)}
+.tag.design{background:var(--tag-design-bg);color:var(--tag-design-txt)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.card-date{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--text-muted)}
+.card-date svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card-priority{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:6px;letter-spacing:.4px;text-transform:uppercase}
+.priority-high{background:#FEE2E2;color:#DC2626}
+.priority-medium{background:#FEF9C3;color:#A16207}
+.priority-low{background:#DCFCE7;color:#16A34A}
+body.dark .priority-high{background:#3B0A0A;color:#FCA5A5}
+body.dark .priority-medium{background:#2A200A;color:#FDE68A}
+body.dark .priority-low{background:#0A2015;color:#86EFAC}
+.card-actions{display:flex;gap:3px}
+.card-btn{font-size:11.5px;color:var(--text-muted);padding:2px 6px;border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:var(--tr);background:transparent;font-family:inherit;line-height:1.6}
+.card-btn:hover{background:var(--bg-surface);color:var(--text-primary)}
+
+/* WIDGET */
+.bottom-widget{margin:0 30px 22px;flex-shrink:0}
+.widget-inner{background:var(--bg-card);border:1.5px solid var(--border);border-radius:18px;padding:18px 24px;display:flex;align-items:center;gap:22px;box-shadow:var(--shadow-card)}
+.widget-flower{font-size:32px;flex-shrink:0}
+.widget-greet{flex:1}
+.widget-greet h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;color:var(--text-primary)}
+.widget-greet p{font-size:12.5px;color:var(--text-secondary);margin-top:2px}
+.widget-stats{display:flex;gap:9px;flex-shrink:0}
+.stat-pill{background:var(--bg-surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;text-align:center;min-width:72px}
+.stat-num{font-size:20px;font-weight:700;color:var(--text-primary);line-height:1}
+.stat-label{font-size:10px;color:var(--text-muted);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.stat-pill.s1{border-top:3px solid #74C0FC}
+.stat-pill.s2{border-top:3px solid #A78BFA}
+.stat-pill.s3{border-top:3px solid #6EE7B7}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(8,15,40,.5);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg-card);border-radius:22px;border:1.5px solid var(--border);box-shadow:0 24px 80px rgba(10,20,50,.28);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:30px;animation:slideUp .3s var(--ease)}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.modal-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:500;color:var(--text-primary)}
+.modal-close{width:30px;height:30px;border-radius:8px;border:none;background:var(--bg-surface);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:17px;transition:var(--tr)}
+.modal-close:hover{background:var(--border)}
+.mform-group{margin-bottom:15px}
+.mform-group label{display:block;font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.mform-group input,.mform-group textarea,.mform-group select{width:100%;border:1.5px solid var(--border);border-radius:11px;padding:9px 13px;font-family:'Manrope',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--bg-surface);outline:none;transition:var(--tr)}
+.mform-group input:focus,.mform-group textarea:focus,.mform-group select:focus{border-color:rgba(255,225,78,.7);box-shadow:0 0 0 3px rgba(255,225,78,.1)}
+.mform-group textarea{resize:vertical;min-height:70px}
+.mform-row{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.modal-actions{display:flex;gap:9px;margin-top:22px;justify-content:flex-end}
+.btn-cancel{padding:9px 18px;border:1.5px solid var(--border);border-radius:11px;background:transparent;font-family:'Manrope',sans-serif;font-size:13.5px;color:var(--text-secondary);cursor:pointer;transition:var(--tr);font-weight:500}
+.btn-cancel:hover{border-color:var(--text-secondary);color:var(--text-primary)}
+.btn-save{padding:9px 22px;background:var(--yellow);border:none;border-radius:11px;font-family:'Manrope',sans-serif;font-size:13.5px;font-weight:700;color:var(--navy);cursor:pointer;transition:var(--tr)}
+.btn-save:hover{background:var(--yellow-hover);transform:translateY(-1px)}
+
+/* VIEWS */
+.view-section{background:var(--bg-card);border:1.5px solid var(--border);border-radius:18px;padding:24px;margin-bottom:18px;box-shadow:var(--shadow-card)}
+.view-section-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.vscount{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;color:var(--text-muted);background:var(--bg-surface);border:1px solid var(--border);padding:1px 8px;border-radius:99px}
+.tlist-row{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:10px;transition:background .15s}
+.tlist-row:hover{background:var(--bg-surface)}
+.tlist-row+.tlist-row{border-top:1px solid var(--border-soft);margin-top:1px}
+.tlist-check{width:19px;height:19px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center}
+.tlist-check:hover{border-color:var(--yellow)}
+.tlist-check.done{background:#6EE7B7;border-color:#6EE7B7}
+.tlist-check.done::after{content:'';display:block;width:9px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)}
+.tlist-info{flex:1;min-width:0}
+.tlist-title{font-size:13px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tlist-title.done-t{text-decoration:line-through;color:var(--text-muted)}
+.tlist-desc{font-size:11.5px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tlist-meta{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.tlist-date{font-size:10.5px;color:var(--text-muted)}
+
+/* CALENDAR */
+.cal-wrapper{display:grid;grid-template-columns:1fr 290px;gap:18px;align-items:start}
+.cal-main{background:var(--bg-card);border:1.5px solid var(--border);border-radius:20px;padding:22px;box-shadow:var(--shadow-card)}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.cal-month-label{font-family:'Playfair Display',serif;font-size:21px;font-weight:500;color:var(--text-primary);min-width:190px;text-align:center}
+.cal-nav-btn{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg-surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--text-secondary);transition:var(--tr);line-height:1}
+.cal-nav-btn:hover{border-color:rgba(255,225,78,.6);background:var(--yellow-soft)}
+.cal-today-btn{font-size:11.5px;font-weight:700;font-family:'Manrope',sans-serif;color:var(--text-secondary);background:var(--bg-surface);border:1.5px solid var(--border);border-radius:8px;padding:6px 13px;cursor:pointer;transition:var(--tr)}
+.cal-today-btn:hover{border-color:rgba(255,225,78,.6);background:var(--yellow-soft)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-head{text-align:center;font-size:10.5px;font-weight:700;color:var(--text-muted);padding:7px 0 9px;text-transform:uppercase;letter-spacing:.5px}
+.cal-day{min-height:80px;border-radius:11px;border:1.5px solid transparent;padding:7px 6px 5px;background:var(--bg-surface);transition:border-color .15s,background .15s;cursor:pointer}
+.cal-day:hover{border-color:rgba(255,225,78,.5);background:var(--yellow-soft)}
+.cal-day.other-month{opacity:.3;pointer-events:none}
+.cal-day.today{border-color:var(--yellow);background:var(--yellow-soft)}
+.cal-day.selected{border-color:var(--navy)!important}
+.cal-day-num{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;line-height:1}
+.cal-day.today .cal-day-num{width:22px;height:22px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+body.dark .cal-day.today .cal-day-num{background:var(--yellow);color:var(--navy)}
+.cal-task-pill{font-size:9.5px;font-weight:500;color:var(--text-secondary);background:var(--bg-card);border-radius:4px;padding:2px 5px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:3px solid var(--col0);display:block}
+.cal-task-pill.p-high{border-color:#FF6B6B}
+.cal-task-pill.p-medium{border-color:var(--col1)}
+.cal-task-pill.p-low{border-color:var(--col3)}
+.cal-more{font-size:9.5px;color:var(--text-muted);font-weight:700}
+.cal-sidebar{display:flex;flex-direction:column;gap:14px}
+.cal-panel{background:var(--bg-card);border:1.5px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow-card)}
+.cal-panel-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:500;color:var(--text-primary);margin-bottom:12px}
+.cal-selected-date{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border-soft)}
+.cal-day-task-item{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--border-soft)}
+.cal-day-task-item:last-child{border-bottom:none}
+.cal-task-stripe{width:3px;border-radius:2px;align-self:stretch;flex-shrink:0;min-height:14px}
+.cal-day-task-title{font-size:12.5px;font-weight:600;color:var(--text-primary);margin-bottom:3px}
+.cal-no-tasks{font-size:13px;color:var(--text-muted);font-style:italic;padding:8px 0;text-align:center}
+.cal-add-task-btn{width:100%;margin-top:12px;padding:9px;border-radius:11px;border:1.5px dashed var(--border);background:transparent;font-family:'Manrope',sans-serif;font-size:12.5px;color:var(--text-muted);cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:6px}
+.cal-add-task-btn:hover{border-color:rgba(255,225,78,.6);background:var(--yellow-soft)}
+
+/* LABELS */
+.labels-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+.label-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-card);transition:box-shadow .2s,transform .2s}
+.label-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-3px)}
+.label-card-header{padding:16px 18px 13px;display:flex;align-items:center;gap:11px;border-bottom:1.5px solid var(--border-soft)}
+.label-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.label-card-name{font-size:14.5px;font-weight:700;color:var(--text-primary)}
+.label-card-sub{font-size:11.5px;color:var(--text-muted);margin-top:1px}
+.label-progress-wrap{padding:11px 18px 7px}
+.label-prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:5px;font-weight:600}
+.label-prog-track{height:4px;background:var(--border);border-radius:3px;overflow:hidden}
+.label-prog-fill{height:100%;border-radius:3px;transition:width .5s}
+.label-tasks-list{padding:3px 18px 15px}
+.label-task-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border-soft)}
+.label-task-row:last-child{border-bottom:none}
+.label-task-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.label-task-title{flex:1;font-size:12.5px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.label-task-title.done-l{text-decoration:line-through;color:var(--text-muted)}
+
+/* REPORTS */
+.report-top-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.report-stat-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:17px;padding:18px;box-shadow:var(--shadow-card);position:relative;overflow:hidden}
+.report-stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:17px 17px 0 0}
+.report-stat-card.c-blue::before{background:#74C0FC}
+.report-stat-card.c-green::before{background:#6EE7B7}
+.report-stat-card.c-purple::before{background:#A78BFA}
+.report-stat-card.c-red::before{background:#FF6B6B}
+.report-stat-icon{font-size:20px;margin-bottom:10px}
+.report-stat-num{font-size:34px;font-weight:700;color:var(--text-primary);line-height:1;margin-bottom:4px}
+.report-stat-label{font-size:11.5px;color:var(--text-muted);font-weight:600}
+.report-two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.report-section{background:var(--bg-card);border:1.5px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow-card)}
+.report-section h2{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:18px}
+.report-bar-row{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.report-bar-label{width:80px;font-size:12px;color:var(--text-secondary);text-align:right;flex-shrink:0;font-weight:500}
+.report-bar-track{flex:1;height:9px;background:var(--border);border-radius:5px;overflow:hidden}
+.report-bar-fill{height:100%;border-radius:5px;transition:width .7s ease}
+.report-bar-val{width:26px;font-size:12px;font-weight:700;color:var(--text-primary);flex-shrink:0;text-align:right}
+.completion-ring-wrap{display:flex;align-items:center;gap:22px;padding:6px 0}
+.completion-ring{width:96px;height:96px;flex-shrink:0}
+.completion-ring-pct{font-size:30px;font-weight:700;color:var(--text-primary);line-height:1}
+.completion-ring-sub{font-size:12.5px;color:var(--text-muted);margin-top:3px}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--navy);color:#fff;padding:11px 18px;border-radius:11px;font-size:13px;font-weight:500;z-index:9999;transform:translateY(16px);opacity:0;transition:all .3s var(--ease);pointer-events:none;max-width:280px;border:1px solid rgba(255,255,255,.08)}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-left">
+    <div class="login-brand-big">
+      <h1>Lumo</h1>
+      <p>task management</p>
+    </div>
+    <p class="login-tagline">Produtividade tranquila para pessoas criativas.</p>
+    <div class="login-mockup">
+      <div class="mockup-header">
+        <div class="mockup-dot" style="background:#FF6B6B"></div>
+        <div class="mockup-dot" style="background:#FFB347"></div>
+        <div class="mockup-dot" style="background:#6EE7B7"></div>
+      </div>
+      <div class="mockup-cols">
+        <div class="mockup-col"><div class="mockup-col-h">A FAZER</div><div class="mockup-card"><div class="mockup-card-title">Redesign landing</div><div class="mockup-tag">Design</div></div><div class="mockup-card"><div class="mockup-card-title">Escrever copy</div><div class="mockup-tag">Trabalho</div></div></div>
+        <div class="mockup-col"><div class="mockup-col-h">EM ANDAMENTO</div><div class="mockup-card"><div class="mockup-card-title">Estudar TypeScript</div><div class="mockup-tag">Estudos</div></div></div>
+        <div class="mockup-col"><div class="mockup-col-h">CONCLUÍDO</div><div class="mockup-card"><div class="mockup-card-title">Setup projeto</div><div class="mockup-tag">Trabalho</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-form-wrap">
+      <h2 id="auth-title">Bem-vindo de volta</h2>
+      <p class="subtitle" id="auth-subtitle">Entre para continuar sua jornada produtiva.</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="setAuthMode('login')">Entrar</button>
+        <button class="auth-tab" id="tab-register" onclick="setAuthMode('register')">Criar conta</button>
+      </div>
+      <div class="login-error" id="login-error">E-mail ou senha incorretos.</div>
+      <div class="auth-panel" id="login-panel">
+        <div class="form-group"><label>E-mail</label><input type="email" id="login-email" placeholder="voce@email.com"></div>
+        <div class="form-group"><label>Senha</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+        <button class="btn-primary" id="login-btn" onclick="doLogin()">Entrar no Lumo</button>
+        <p class="auth-note">Entre com a conta que você cadastrou para acessar suas tarefas.</p>
+      </div>
+      <div class="auth-panel hidden" id="register-panel">
+        <div class="form-group"><label>Nome</label><input type="text" id="register-name" placeholder="Seu nome"></div>
+        <div class="form-group"><label>E-mail</label><input type="email" id="register-email" placeholder="voce@email.com"></div>
+        <div class="form-group"><label>Senha</label><input type="password" id="register-pass" placeholder="Crie uma senha"></div>
+        <div class="form-group"><label>Confirmar senha</label><input type="password" id="register-confirm" placeholder="Repita a senha"></div>
+        <button class="btn-primary" id="register-btn" onclick="doRegister()">Criar conta</button>
+        <p class="auth-note">Ao criar a conta, seu quadro já abre com tarefas iniciais salvas no banco.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><span class="logo-text">Lumo</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" onclick="setNav(this,'board')">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span class="nav-label">Quadro</span>
+          <span class="nav-badge" id="total-badge">0</span>
+        </div>
+        <div class="nav-item" onclick="setNav(this,'mytasks')">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span class="nav-label">Minhas tarefas</span>
+        </div>
+        <div class="nav-item" onclick="setNav(this,'calendar')">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span class="nav-label">Calendário</span>
+        </div>
+        <div class="nav-item" onclick="setNav(this,'labels')">
+          <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span class="nav-label">Etiquetas</span>
+        </div>
+        <div class="nav-item" onclick="setNav(this,'reports')">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span class="nav-label">Relatórios</span>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="nav-item" onclick="openNewTask()">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span class="nav-label">Nova tarefa</span>
+        </div>
+        <div class="nav-item" onclick="doLogout()">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span class="nav-label">Sair</span>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="dark-toggle" onclick="toggleDark()">
+          <svg width="15" height="15" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span>Modo escuro</span>
+          <div class="toggle-track" id="dark-track"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="user-card">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div>
+            <div class="user-name" id="user-name">Usuário</div>
+            <div class="user-email" id="user-email">sem sessão iniciada</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h1 class="page-title" id="page-title">Meu Quadro ✨</h1>
+          <p class="page-subtitle" id="page-subtitle">Organize suas tarefas de forma simples e tranquila.</p>
+        </div>
+        <div class="top-bar-right">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar tarefas…" id="search-input" oninput="renderBoard()">
+          </div>
+          <button class="btn-new-task" onclick="openNewTask()">
+            <svg viewBox="0 0 24 24" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nova tarefa
+          </button>
+        </div>
+      </div>
+
+      <div id="view-board" style="display:flex;flex-direction:column;flex:1;min-height:0">
+        <div class="filter-bar">
+          <span class="filter-label">Filtrar:</span>
+          <button class="filter-chip active" onclick="setFilter(this,'all')">Todas</button>
+          <button class="filter-chip" onclick="setFilter(this,'tag:work')"><span class="chip-dot" style="background:var(--tag-work-txt)"></span>Trabalho</button>
+          <button class="filter-chip" onclick="setFilter(this,'tag:study')"><span class="chip-dot" style="background:var(--tag-study-txt)"></span>Estudos</button>
+          <button class="filter-chip" onclick="setFilter(this,'tag:personal')"><span class="chip-dot" style="background:var(--tag-personal-txt)"></span>Pessoal</button>
+          <button class="filter-chip" onclick="setFilter(this,'tag:design')"><span class="chip-dot" style="background:var(--tag-design-txt)"></span>Design</button>
+          <button class="filter-chip" onclick="setFilter(this,'priority:high')">🔴 Alta prioridade</button>
+        </div>
+        <div class="kanban-area"><div class="kanban-board" id="kanban-board"></div></div>
+        <div class="bottom-widget">
+          <div class="widget-inner">
+            <div class="widget-flower">🌻</div>
+            <div class="widget-greet">
+              <h3 id="greet-text">Olá!</h3>
+              <p id="greet-sub">Carregando tarefas…</p>
+            </div>
+            <div class="widget-stats">
+              <div class="stat-pill s1"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total</div></div>
+              <div class="stat-pill s2"><div class="stat-num" id="stat-prog">0</div><div class="stat-label">Andamento</div></div>
+              <div class="stat-pill s3"><div class="stat-num" id="stat-done">0</div><div class="stat-label">Feitas</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-mytasks"  style="display:none;flex:1;overflow-y:auto;padding:20px 30px"></div>
+      <div id="view-calendar" style="display:none;flex:1;overflow-y:auto;padding:20px 30px"></div>
+      <div id="view-labels"   style="display:none;flex:1;overflow-y:auto;padding:20px 30px"></div>
+      <div id="view-reports"  style="display:none;flex:1;overflow-y:auto;padding:20px 30px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="task-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title-text">Nova tarefa</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mform-group"><label>Título</label><input type="text" id="f-title" placeholder="O que precisa ser feito?"></div>
+    <div class="mform-group"><label>Descrição</label><textarea id="f-desc" placeholder="Detalhes (opcional)…"></textarea></div>
+    <div class="mform-row">
+      <div class="mform-group"><label>Etiqueta</label><select id="f-tag"><option value="work">Trabalho</option><option value="study">Estudos</option><option value="personal">Pessoal</option><option value="design">Design</option></select></div>
+      <div class="mform-group"><label>Prioridade</label><select id="f-priority"><option value="medium">Média</option><option value="high">Alta</option><option value="low">Baixa</option></select></div>
+    </div>
+    <div class="mform-row">
+      <div class="mform-group"><label>Data</label><input type="date" id="f-date"></div>
+      <div class="mform-group"><label>Coluna</label><select id="f-col"><option value="todo">A Fazer</option><option value="doing">Em andamento</option><option value="review">Em revisão</option><option value="done">Concluído</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveTask()">Salvar tarefa</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:8000/api';
+const STORAGE_TOKEN = 'lumo_token';
+const STORAGE_USER = 'lumo_user';
+const COLS = [
+  {id:'todo',   name:'A Fazer',      dot:'#FFB347'},
+  {id:'doing',  name:'Em andamento', dot:'#74C0FC'},
+  {id:'review', name:'Em revisão',   dot:'#A78BFA'},
+  {id:'done',   name:'Concluído',    dot:'#6EE7B7'},
+];
+const TAG_LABELS = {work:'Trabalho',study:'Estudos',personal:'Pessoal',design:'Design'};
+const MONTHS = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MNAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+let tasks=[], token=localStorage.getItem(STORAGE_TOKEN), currentUser=safeJSON(localStorage.getItem(STORAGE_USER)), editId=null, currentFilter='all', isDark=false, authMode='login';
+let calYear=new Date().getFullYear(), calMonth=new Date().getMonth(), calSelected=new Date().toISOString().split('T')[0];
+
+/* ── LOGIN ── */
+function safeJSON(value){ try { return value ? JSON.parse(value) : null; } catch { return null; } }
+function readJson(res){ return res.json().catch(()=>({})); }
+function clearAuthError(){ const err=document.getElementById('login-error'); err.style.display='none'; err.textContent=''; }
+function showAuthError(message){ const err=document.getElementById('login-error'); err.textContent=message; err.style.display='block'; }
+function saveSession(){
+  if(token) localStorage.setItem(STORAGE_TOKEN, token);
+  if(currentUser) localStorage.setItem(STORAGE_USER, JSON.stringify(currentUser));
+}
+function clearSession(){
+  token=null;
+  currentUser=null;
+  localStorage.removeItem(STORAGE_TOKEN);
+  localStorage.removeItem(STORAGE_USER);
+}
+function syncUserUI(){
+  const name=currentUser?.name || 'Usuário';
+  const email=currentUser?.email || 'sem sessão iniciada';
+  document.getElementById('user-name').textContent=name;
+  document.getElementById('user-email').textContent=email;
+  document.getElementById('user-avatar').textContent=(name.trim()[0] || 'A').toUpperCase();
+}
+function setAuthMode(mode){
+  authMode=mode;
+  const isLogin=mode==='login';
+  document.getElementById('tab-login').classList.toggle('active', isLogin);
+  document.getElementById('tab-register').classList.toggle('active', !isLogin);
+  document.getElementById('login-panel').classList.toggle('hidden', !isLogin);
+  document.getElementById('register-panel').classList.toggle('hidden', isLogin);
+  document.getElementById('auth-title').textContent=isLogin?'Bem-vindo de volta':'Crie sua conta';
+  document.getElementById('auth-subtitle').textContent=isLogin?'Entre para continuar sua jornada produtiva.':'Cadastre-se para salvar suas tarefas no banco de dados.';
+  clearAuthError();
+}
+function showDashboard(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  if(isDark){document.body.classList.add('dark');document.getElementById('dark-track').classList.add('on');}
+  syncUserUI();
+}
+function showLogin(){
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  setAuthMode(authMode || 'login');
+}
+async function doLogin(){
+  const email=(document.getElementById('login-email').value||'').trim();
+  const pass=document.getElementById('login-pass').value;
+  clearAuthError();
+  if(!email || !pass){ showAuthError('Preencha e-mail e senha.'); return; }
+  const btn=document.getElementById('login-btn');
+  btn.disabled=true; btn.textContent='Entrando…';
+  try {
+    const form=new URLSearchParams({username:email,password:pass});
+    const res=await fetch(`${API}/auth/login`,{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:form
+    });
+    const data=await readJson(res);
+    if(!res.ok) throw new Error(data.detail||'Não foi possível entrar.');
+    token=data.access_token;
+    currentUser={name:data.user_name,email:data.user_email};
+    saveSession();
+    showDashboard();
+    await loadTasks();
+    updateStats();
+    renderBoard();
+    showToast('Login realizado com sucesso.');
+  } catch(e){
+    showAuthError(e.message||'Erro no login.');
+  } finally { btn.disabled=false; btn.textContent='Entrar no Lumo'; }
+}
+async function doRegister(){
+  const name=(document.getElementById('register-name').value||'').trim();
+  const email=(document.getElementById('register-email').value||'').trim();
+  const pass=document.getElementById('register-pass').value;
+  const confirm=document.getElementById('register-confirm').value;
+  clearAuthError();
+  if(!name || !email || !pass || !confirm){ showAuthError('Preencha todos os campos para criar a conta.'); return; }
+  if(pass!==confirm){ showAuthError('As senhas não coincidem.'); return; }
+  const btn=document.getElementById('register-btn');
+  btn.disabled=true; btn.textContent='Criando…';
+  try {
+    const res=await fetch(`${API}/auth/register`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,email,password:pass})
+    });
+    const data=await readJson(res);
+    if(!res.ok) throw new Error(data.detail||'Não foi possível criar a conta.');
+    token=data.access_token;
+    currentUser={name:data.user_name,email:data.user_email};
+    saveSession();
+    showDashboard();
+    await loadTasks();
+    updateStats();
+    renderBoard();
+    showToast('Conta criada com sucesso.');
+  } catch(e){
+    showAuthError(e.message||'Erro ao criar conta.');
+  } finally { btn.disabled=false; btn.textContent='Criar conta'; }
+}
+function doLogout(){
+  clearSession(); tasks=[];
+  showLogin();
+  showToast('Sessão encerrada.');
+}
+document.getElementById('login-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('login-email').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('register-confirm').addEventListener('keydown',e=>{ if(e.key==='Enter') doRegister(); });
+
+/* ── API ── */
+async function api(path,opts={}){
+  const headers={...(opts.headers||{})};
+  if(token) headers.Authorization=`Bearer ${token}`;
+  if(!(opts.body instanceof FormData) && !headers['Content-Type']) headers['Content-Type']='application/json';
+  const res=await fetch(API+path,{...opts,headers});
+  if(res.status===204) return;
+  const data=await readJson(res);
+  if(!res.ok){
+    if(res.status===401){ clearSession(); showLogin(); }
+    throw new Error(data.detail||`Erro ${res.status}`);
+  }
+  return data;
+}
+async function loadTasks(){ tasks=await api('/tasks'); }
+async function bootstrapSession(){
+  syncUserUI();
+  setAuthMode('login');
+  if(!token){ showLogin(); return; }
+  try{
+    const res=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
+    const data=await readJson(res);
+    if(!res.ok) throw new Error();
+    currentUser=data;
+    saveSession();
+    showDashboard();
+    await loadTasks();
+    updateStats();
+    renderBoard();
+  }catch{
+    clearSession();
+    showLogin();
+  }
+}
+
+/* ── FILTER / STATS ── */
+function setFilter(el,f){ document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); currentFilter=f; renderBoard(); }
+function filteredCol(status){
+  const q=document.getElementById('search-input').value.trim().toLowerCase();
+  return tasks.filter(t=>{
+    if(t.status!==status) return false;
+    if(q&&!t.title.toLowerCase().includes(q)) return false;
+    if(currentFilter==='all') return true;
+    if(currentFilter.startsWith('tag:')) return t.category===currentFilter.slice(4);
+    if(currentFilter.startsWith('priority:')) return t.priority===currentFilter.slice(9);
+    return true;
+  });
+}
+function updateStats(){
+  syncUserUI();
+  document.getElementById('stat-total').textContent=tasks.length;
+  document.getElementById('stat-prog').textContent=tasks.filter(t=>t.status==='doing').length;
+  document.getElementById('stat-done').textContent=tasks.filter(t=>t.done||t.status==='done').length;
+  document.getElementById('total-badge').textContent=tasks.length;
+  const h=new Date().getHours();
+  const name=currentUser?.name || 'Usuário';
+  document.getElementById('greet-text').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+name+'!';
+  const today=new Date().toISOString().split('T')[0];
+  const n=tasks.filter(t=>t.due_date===today&&!t.done).length;
+  document.getElementById('greet-sub').textContent=n>0?`Você tem ${n} tarefa${n>1?'s':''} para hoje.`:'Nenhuma tarefa vence hoje. ✨';
+}
+function fmtDate(d){ if(!d) return ''; const p=d.split('-'); return `${parseInt(p[2])} ${MONTHS[parseInt(p[1])-1]}`; }
+
+/* ── DRAG & DROP ── */
+let dragId=null;
+function onDragStart(e,id){ dragId=id; requestAnimationFrame(()=>{ const el=document.querySelector(`.task-card[data-id="${id}"]`); if(el) el.classList.add('dragging'); }); }
+function onDragEnd(){ document.querySelectorAll('.task-card.dragging').forEach(el=>el.classList.remove('dragging')); document.querySelectorAll('.kanban-col.drag-over').forEach(el=>el.classList.remove('drag-over')); dragId=null; }
+function onColDragOver(e,el){ e.preventDefault(); el.classList.add('drag-over'); }
+function onColDragLeave(e,el){ if(!el.contains(e.relatedTarget)) el.classList.remove('drag-over'); }
+async function onColDrop(e,status){
+  e.preventDefault(); document.querySelectorAll('.kanban-col.drag-over').forEach(el=>el.classList.remove('drag-over'));
+  if(!dragId) return;
+  const t=getTaskById(dragId); if(!t||t.status===status) return;
+  try {
+    await api(`/tasks/${t.id}`,{method:'PUT',body:JSON.stringify({...t,status,done:status==='done'})});
+    showToast('Tarefa movida! ✓'); await loadTasks(); renderBoard(); updateStats();
+  } catch(e){ showToast('Erro ao mover.'); }
+  dragId=null;
+}
+
+/* ── RENDER BOARD ── */
+function renderBoard(){
+  const board=document.getElementById('kanban-board'); board.innerHTML='';
+  COLS.forEach(col=>{
+    const ct=filteredCol(col.id), all=tasks.filter(t=>t.status===col.id);
+    const done=all.filter(t=>t.done||t.status==='done').length;
+    const pct=all.length?Math.round(done/all.length*100):0;
+    const colEl=document.createElement('div'); colEl.className='kanban-col';
+    colEl.addEventListener('dragover',e=>onColDragOver(e,colEl));
+    colEl.addEventListener('dragleave',e=>onColDragLeave(e,colEl));
+    colEl.addEventListener('drop',e=>onColDrop(e,col.id));
+    colEl.innerHTML=`
+      <div class="col-header">
+        <div class="col-dot" style="background:${col.dot}"></div>
+        <span class="col-name">${col.name}</span>
+        <span class="col-count">${ct.length}</span>
+      </div>
+      <div class="col-progress">
+        <div class="progress-label"><span>${done}/${all.length} feitas</span><span>${pct}%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${col.dot}"></div></div>
+      </div>
+      <div class="col-body" id="col-body-${col.id}"></div>
+      <div class="col-add" onclick="openNewTaskInCol('${col.id}')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Adicionar tarefa
+      </div>`;
+    board.appendChild(colEl);
+    const body=colEl.querySelector(`#col-body-${col.id}`);
+    ct.forEach(t=>body.appendChild(makeCard(t)));
+  });
+}
+function makeCard(t){
+  const card=document.createElement('div');
+  card.className='task-card'; card.dataset.id=t.id; card.draggable=true;
+  card.style.opacity=(t.done||t.status==='done')?'0.6':'1';
+  card.addEventListener('dragstart',e=>onDragStart(e,t.id));
+  card.addEventListener('dragend',onDragEnd);
+  const isDone=t.done||t.status==='done';
+  card.innerHTML=`
+    <div class="card-top">
+      <span class="card-title" style="text-decoration:${isDone?'line-through':''}">${esc(t.title)}</span>
+      <div class="card-check ${isDone?'done':''}" onclick="toggleDone('${t.id}',event)"></div>
+    </div>
+    <div class="card-tags"><span class="tag ${t.category}">${TAG_LABELS[t.category]||t.category}</span></div>
+    <div class="card-footer">
+      <span class="card-date">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        ${fmtDate(t.due_date)}
+      </span>
+      <div class="card-actions">
+        <span class="card-priority priority-${t.priority}">${t.priority==='high'?'Alta':t.priority==='medium'?'Média':'Baixa'}</span>
+        <button class="card-btn" onclick="editTask('${t.id}',event)">✎</button>
+        <button class="card-btn" onclick="deleteTask('${t.id}',event)" style="color:#DC2626">✕</button>
+      </div>
+    </div>`;
+  return card;
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function getTaskById(id){ return tasks.find(x=>String(x.id)===String(id)); }
+
+/* ── CRUD ── */
+async function toggleDone(id,e){
+  e.stopPropagation();
+  const t=getTaskById(id); if(!t) return;
+  const done=!(t.done||t.status==='done');
+  try { await api(`/tasks/${id}`,{method:'PUT',body:JSON.stringify({...t,done,status:done?'done':t.status==='done'?'todo':t.status})}); showToast(done?'Concluída! 🎉':'Reaberta.'); await loadTasks(); renderBoard(); updateStats(); }
+  catch(e){ showToast('Erro.'); }
+}
+async function deleteTask(id,e){
+  e.stopPropagation();
+  if(!confirm('Excluir esta tarefa?')) return;
+  try { await api(`/tasks/${id}`,{method:'DELETE'}); showToast('Tarefa removida.'); await loadTasks(); renderBoard(); updateStats(); }
+  catch(e){ showToast('Erro ao remover.'); }
+}
+async function saveTask(){
+  const title=document.getElementById('f-title').value.trim();
+  if(!title){ document.getElementById('f-title').focus(); showToast('Dê um título!'); return; }
+  const payload={title,description:document.getElementById('f-desc').value.trim(),category:document.getElementById('f-tag').value,priority:document.getElementById('f-priority').value,status:document.getElementById('f-col').value,due_date:document.getElementById('f-date').value||null,done:document.getElementById('f-col').value==='done'};
+  try {
+    if(editId) await api(`/tasks/${editId}`,{method:'PUT',body:JSON.stringify(payload)});
+    else await api('/tasks',{method:'POST',body:JSON.stringify(payload)});
+    showToast(editId?'Atualizada! ✓':'Criada! ✨');
+    closeModal(); await loadTasks(); renderBoard(); updateStats();
+  } catch(e){ showToast('Erro ao salvar.'); }
+}
+
+/* ── MODAL ── */
+function openNewTask(){ editId=null; document.getElementById('modal-title-text').textContent='Nova tarefa'; document.getElementById('f-title').value=''; document.getElementById('f-desc').value=''; document.getElementById('f-tag').value='work'; document.getElementById('f-priority').value='medium'; document.getElementById('f-date').value=new Date().toISOString().split('T')[0]; document.getElementById('f-col').value='todo'; document.getElementById('task-modal').classList.add('open'); setTimeout(()=>document.getElementById('f-title').focus(),80); }
+function openNewTaskInCol(status){ openNewTask(); document.getElementById('f-col').value=status; }
+function editTask(id,e){ e.stopPropagation(); const t=getTaskById(id); if(!t) return; editId=id; document.getElementById('modal-title-text').textContent='Editar tarefa'; document.getElementById('f-title').value=t.title; document.getElementById('f-desc').value=t.description||''; document.getElementById('f-tag').value=t.category; document.getElementById('f-priority').value=t.priority; document.getElementById('f-date').value=t.due_date||''; document.getElementById('f-col').value=t.status; document.getElementById('task-modal').classList.add('open'); setTimeout(()=>document.getElementById('f-title').focus(),80); }
+function closeModal(){ document.getElementById('task-modal').classList.remove('open'); editId=null; }
+
+/* ── NAV ── */
+const VIEW_META={board:{title:'Meu Quadro ✨',subtitle:'Organize suas tarefas de forma simples e tranquila.'},mytasks:{title:'Minhas Tarefas',subtitle:'Todas as suas tarefas em uma lista clara.'},calendar:{title:'Calendário',subtitle:'Visualize suas tarefas por data.'},labels:{title:'Etiquetas',subtitle:'Tarefas agrupadas por categoria.'},reports:{title:'Relatórios',subtitle:'Acompanhe seu progresso e produtividade.'}};
+function setNav(el,view){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active');
+  ['board','mytasks','calendar','labels','reports'].forEach(v=>{ const d=document.getElementById('view-'+v); if(d) d.style.display=v===view?(v==='board'?'flex':'block'):'none'; });
+  const m=VIEW_META[view]||{}; document.getElementById('page-title').textContent=m.title||''; document.getElementById('page-subtitle').textContent=m.subtitle||'';
+  if(view==='mytasks') renderMyTasks(); if(view==='calendar') renderCalendar(); if(view==='labels') renderLabels(); if(view==='reports') renderReports();
+}
+
+/* ── MY TASKS ── */
+function renderMyTasks(){
+  const c=document.getElementById('view-mytasks'); const today=new Date().toISOString().split('T')[0];
+  const groups=[{label:'📅 Hoje',items:tasks.filter(t=>t.due_date===today&&!t.done&&t.status!=='done'),accent:'#FFB347'},{label:'⏳ Atrasadas',items:tasks.filter(t=>t.due_date&&t.due_date<today&&!t.done&&t.status!=='done'),accent:'#FF6B6B'},{label:'🔜 Próximas',items:tasks.filter(t=>t.due_date>today&&!t.done&&t.status!=='done'),accent:'#74C0FC'},{label:'✅ Concluídas',items:tasks.filter(t=>t.done||t.status==='done'),accent:'#6EE7B7'}];
+  c.innerHTML='<div style="max-width:860px">'+groups.map(g=>{ if(!g.items.length) return '';
+    return '<div class="view-section" style="border-top:3px solid '+g.accent+';padding-top:20px"><div class="view-section-title">'+g.label+'<span class="vscount">'+g.items.length+'</span></div>'
+      +g.items.map(t=>'<div class="tlist-row"><div class="tlist-check '+(t.done||t.status==="done"?'done':'')+'" onclick="toggleDone(\''+t.id+'\',event)"></div><div class="tlist-info"><div class="tlist-title '+(t.done||t.status==="done"?'done-t':'')+'">'+esc(t.title)+'</div>'+(t.description?'<div class="tlist-desc">'+esc(t.description)+'</div>':'')+'</div><div class="tlist-meta"><span class="tag '+t.category+'" style="font-size:10px">'+TAG_LABELS[t.category]+'</span><span class="card-priority priority-'+t.priority+'" style="font-size:9.5px">'+(t.priority==='high'?'Alta':t.priority==='medium'?'Média':'Baixa')+'</span><span class="tlist-date">'+fmtDate(t.due_date)+'</span><button class="card-btn" onclick="editTask(\''+t.id+'\',event)">✎</button></div></div>').join('')+'</div>'; }).join('')+'</div>';
+}
+
+/* ── CALENDAR ── */
+function renderCalendar(){
+  const c=document.getElementById('view-calendar'); const todayIso=new Date().toISOString().split('T')[0];
+  const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const fd=new Date(calYear,calMonth,1).getDay(), dim=new Date(calYear,calMonth+1,0).getDate(), pd=new Date(calYear,calMonth,0).getDate();
+  const cells=[]; for(let i=fd-1;i>=0;i--) cells.push({day:pd-i,cur:false}); for(let d=1;d<=dim;d++) cells.push({day:d,cur:true}); while(cells.length%7!==0) cells.push({day:cells.length-dim-fd+1,cur:false});
+  const tMap={}; tasks.forEach(t=>{ if(t.due_date){if(!tMap[t.due_date])tMap[t.due_date]=[];tMap[t.due_date].push(t);}});
+  const nav=`<div class="cal-nav"><div style="display:flex;align-items:center;gap:10px"><button class="cal-nav-btn" onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar()">&#8249;</button><span class="cal-month-label">${MNAMES[calMonth]} ${calYear}</span><button class="cal-nav-btn" onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar()">&#8250;</button></div><button class="cal-today-btn" onclick="calYear=new Date().getFullYear();calMonth=new Date().getMonth();calSelected=new Date().toISOString().split('T')[0];renderCalendar()">Hoje</button></div>`;
+  const head=DAYS.map(d=>'<div class="cal-head">'+d+'</div>').join('');
+  const cellsH=cells.map(cell=>{
+    const iso=cell.cur?calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(cell.day).padStart(2,'0'):'';
+    const dt=tMap[iso]||[]; const isToday=iso===todayIso,isSel=iso===calSelected;
+    const cls='cal-day'+(!cell.cur?' other-month':'')+(isToday?' today':'')+(isSel?' selected':'');
+    const num=isToday?'<div class="cal-day-num">'+cell.day+'</div>':'<div class="cal-day-num">'+cell.day+'</div>';
+    const pills=dt.slice(0,2).map(t=>'<span class="cal-task-pill p-'+t.priority+'">'+esc(t.title)+'</span>').join('');
+    const more=dt.length>2?'<div class="cal-more">+'+(dt.length-2)+' mais</div>':'';
+    return '<div class="'+cls+'"'+(cell.cur?' onclick="calSelected=\''+iso+'\';renderCalendar()"':'')+'>'+num+pills+more+'</div>';
+  }).join('');
+  const selT=tMap[calSelected]||[]; const selDate=calSelected?new Date(calSelected+'T12:00:00'):null;
+  const selLabel=selDate?selDate.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}):'';
+  const selH=selT.length?selT.map(t=>'<div class="cal-day-task-item"><div class="cal-task-stripe" style="background:'+(t.priority==='high'?'#FF6B6B':t.priority==='medium'?'#74C0FC':'#6EE7B7')+'"></div><div style="flex:1"><div class="cal-day-task-title">'+esc(t.title)+'</div><span class="tag '+t.category+'" style="font-size:10px">'+TAG_LABELS[t.category]+'</span></div></div>').join(''):'<div class="cal-no-tasks">Nenhuma tarefa neste dia.</div>';
+  c.innerHTML='<div class="cal-wrapper"><div class="cal-main">'+nav+'<div class="cal-grid">'+head+cellsH+'</div></div><div class="cal-sidebar"><div class="cal-panel"><div class="cal-panel-title">Detalhes do dia</div><div class="cal-selected-date">'+(selLabel||'Selecione um dia')+'</div>'+selH+(calSelected?'<button class="cal-add-task-btn" onclick="openNewTaskOnDate(\''+calSelected+'\')" >+ Adicionar tarefa</button>':'')+'</div></div></div>';
+}
+function openNewTaskOnDate(date){ openNewTask(); document.getElementById('f-date').value=date; }
+
+/* ── LABELS ── */
+function renderLabels(){
+  const c=document.getElementById('view-labels');
+  const defs=[{key:'work',label:'Trabalho',emoji:'💼',bg:'var(--tag-work-bg)',color:'var(--tag-work-txt)',accent:'#F59E0B'},{key:'study',label:'Estudos',emoji:'📚',bg:'var(--tag-study-bg)',color:'var(--tag-study-txt)',accent:'#3B82F6'},{key:'personal',label:'Pessoal',emoji:'🌱',bg:'var(--tag-personal-bg)',color:'var(--tag-personal-txt)',accent:'#22C55E'},{key:'design',label:'Design',emoji:'🎨',bg:'var(--tag-design-bg)',color:'var(--tag-design-txt)',accent:'#A855F7'}];
+  c.innerHTML='<div class="labels-grid">'+defs.map(tg=>{
+    const grp=tasks.filter(t=>t.category===tg.key), done=grp.filter(t=>t.done||t.status==='done').length, pct=grp.length?Math.round(done/grp.length*100):0;
+    return '<div class="label-card"><div class="label-card-header"><div class="label-icon" style="background:'+tg.bg+';color:'+tg.color+'">'+tg.emoji+'</div><div><div class="label-card-name" style="color:'+tg.color+'">'+tg.label+'</div><div class="label-card-sub">'+grp.length+' tarefa'+(grp.length!==1?'s':'')+' · '+done+' concluída'+(done!==1?'s':'')+'</div></div></div>'
+      +(grp.length?'<div class="label-progress-wrap"><div class="label-prog-row"><span>Progresso</span><span>'+pct+'%</span></div><div class="label-prog-track"><div class="label-prog-fill" style="width:'+pct+'%;background:'+tg.accent+'"></div></div></div>':'')
+      +'<div class="label-tasks-list">'+(grp.length?grp.slice(0,6).map(t=>'<div class="label-task-row"><div class="label-task-dot" style="background:'+tg.accent+'"></div><span class="label-task-title '+(t.done||t.status==="done"?'done-l':'')+'">'+esc(t.title)+'</span><button class="card-btn" onclick="editTask(\''+t.id+'\',event)">✎</button></div>').join(''):'<span style="font-size:12.5px;color:var(--text-muted);font-style:italic">Nenhuma tarefa.</span>')+'</div></div>';
+  }).join('')+'</div>';
+}
+
+/* ── REPORTS ── */
+function renderReports(){
+  const c=document.getElementById('view-reports');
+  const total=tasks.length, done=tasks.filter(t=>t.done||t.status==='done').length, pend=total-done, high=tasks.filter(t=>t.priority==='high'&&!t.done).length;
+  const pct=total?Math.round(done/total*100):0, r=40, circ=2*Math.PI*r, dash=circ*(1-pct/100);
+  const byTag=[{k:'work',l:'Trabalho',c:'#F59E0B'},{k:'study',l:'Estudos',c:'#3B82F6'},{k:'personal',l:'Pessoal',c:'#22C55E'},{k:'design',l:'Design',c:'#A855F7'}].map(x=>({...x,n:tasks.filter(t=>t.category===x.k).length}));
+  const byCols=COLS.map(col=>({name:col.name,dot:col.dot,count:tasks.filter(t=>t.status===col.id).length}));
+  const maxT=Math.max(...byTag.map(x=>x.n),1), maxC=Math.max(...byCols.map(x=>x.count),1);
+  c.innerHTML='<div><div class="report-top-grid"><div class="report-stat-card c-blue"><div class="report-stat-icon">📋</div><div class="report-stat-num">'+total+'</div><div class="report-stat-label">Total de tarefas</div></div><div class="report-stat-card c-green"><div class="report-stat-icon">✅</div><div class="report-stat-num">'+done+'</div><div class="report-stat-label">Concluídas</div></div><div class="report-stat-card c-purple"><div class="report-stat-icon">⏳</div><div class="report-stat-num">'+pend+'</div><div class="report-stat-label">Pendentes</div></div><div class="report-stat-card c-red"><div class="report-stat-icon">🔴</div><div class="report-stat-num">'+high+'</div><div class="report-stat-label">Alta prioridade</div></div></div>'
+    +'<div class="report-two-col"><div class="report-section"><h2>Taxa de conclusão</h2><div class="completion-ring-wrap"><svg class="completion-ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="'+r+'" fill="none" stroke="var(--border)" stroke-width="10"/><circle cx="50" cy="50" r="'+r+'" fill="none" stroke="#6EE7B7" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+dash.toFixed(1)+'" transform="rotate(-90 50 50)"/><text x="50" y="54" text-anchor="middle" font-size="18" font-weight="700" fill="var(--text-primary)" font-family="Manrope">'+pct+'%</text></svg><div><div class="completion-ring-pct">'+done+'<span style="font-size:17px;font-weight:400;color:var(--text-muted)">/'+total+'</span></div><div class="completion-ring-sub">tarefas concluídas</div></div></div></div>'
+    +'<div class="report-section"><h2>Por coluna</h2>'+byCols.map(x=>'<div class="report-bar-row"><span class="report-bar-label">'+x.name+'</span><div class="report-bar-track"><div class="report-bar-fill" style="width:'+Math.round(x.count/maxC*100)+'%;background:'+x.dot+'"></div></div><span class="report-bar-val">'+x.count+'</span></div>').join('')+'</div></div>'
+    +'<div class="report-two-col"><div class="report-section"><h2>Por etiqueta</h2>'+byTag.map(x=>'<div class="report-bar-row"><span class="report-bar-label">'+x.l+'</span><div class="report-bar-track"><div class="report-bar-fill" style="width:'+Math.round(x.n/maxT*100)+'%;background:'+x.c+'"></div></div><span class="report-bar-val">'+x.n+'</span></div>').join('')+'</div></div></div>';
+}
+
+/* ── DARK MODE ── */
+function toggleDark(){ isDark=!isDark; document.body.classList.toggle('dark',isDark); document.getElementById('dark-track').classList.toggle('on',isDark); }
+
+/* ── TOAST ── */
+let toastT=null;
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2500); }
+
+/* ── KEYBOARD ── */
+document.addEventListener('keydown',e=>{ const inp=['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName); if(e.key==='Escape') closeModal(); if(!inp&&(e.key==='n'||e.key==='N')){ e.preventDefault(); openNewTask(); }});
+document.getElementById('task-modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+bootstrapSession();
+</script>
+</body>
+</html>
